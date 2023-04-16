@@ -27,6 +27,7 @@ int main(void)
 		perror("./shell");
 		exit(1);
 	}
+	free(command_line);
 	return (0);
 }
 /**
