@@ -39,12 +39,12 @@ int main(void)
 char *concatenate(char *str, int len)
 {
 	char *path = "/bin/";
-	char *fulle_path = malloc(5 + len);
+	char *full_path = malloc(5 + len);
 	int i = 0, p = 0;
 
 	while (path[i] != '\0')
 	{
-		fulle_path[i] = path[i];
+		full_path[i] = path[i];
 		i++;
 	}
 	p = i;
@@ -52,9 +52,9 @@ char *concatenate(char *str, int len)
 	while (str[i + 1] != '\0')
 	{
 
-		fulle_path[p] = str[i];
+		full_path[p] = str[i];
 		i++;
 		p++;
 	}
-	return (fulle_path);
+	return (full_path);
 }
