@@ -19,7 +19,7 @@ int main(void)
 	len = getline(&command_line, &command_len, stdin);
 	command_line = concatenate(command_line, len);
 
-	char *args[] = {NULL};
+	char *args[] = {"ls",NULL};
 	char *envp[] = {NULL};
 
 	if (execve(command_line, args, envp) == -1) 
