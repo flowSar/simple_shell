@@ -13,35 +13,42 @@
 int main(void)
 {
 	char *command_line = malloc(3);
-	char *args[] = {concatenate(NULL, 0),NULL};
+	char **args_list;
 	char *envp[] = {NULL};
 	unsigned long int command_len = 0;
 	ssize_t len;
-	pid_t pid = fork();
 
-	if (pid == 0)
+	while (1)
 	{
-		printf("$");
-		len = getline(&command_line, &command_len, stdin);
-		command_line = concatenate(command_line, len);
-		if (execve(command_line, args, envp) == -1)
+		pid_t pid = fork();
+
+		if (pid == 0)
 		{
-			perror("./shell");
-			exit(1);
+			printf("$");
+			len = getline(&command_line, &command_len, stdin);
+			command_line = remove_new_Line(command_line);
+			args_list = split_string(command_line);
+			if (execve(concatenate(args_list[0], len), args_list, envp) == -1)
+			{
+				perror("./shell");
+				exit(1);
+			}
+		}
+		else if (pid == -1)
+		{
+			printf("shell closed\n");
+		}
+		else
+		{
+			int status = 0;
+
+			waitpid(pid, &status, 0);
+			if (status == -1)
+			{
+				perror("./shell");
+				exit(1);
+			}
 		}
 	}
-	else
-	{
-		int status = 0;
-
-		waitpid(pid, &status, 0);
-
-		if (execve("./shell", args, envp) == -1)
-		{
-			perror("./shell");
-			exit(1);
-		}
-	}
-	free(command_line);
 	return (0);
 }

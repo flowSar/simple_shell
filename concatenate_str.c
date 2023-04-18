@@ -22,7 +22,7 @@ char *concatenate(char *str, int len)
 	i = 0;
 	if (str == NULL)
 		return(full_path);
-	while (str[i + 1] != '\0')
+	while (str[i] != '\0')
 	{
 		full_path[p] = str[i];
 		i++;

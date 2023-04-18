@@ -1,8 +1,10 @@
- #include <stdlib.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 /**
-  * split_string - splits a string by ' '
+  * split_args - splits string by ' ' and load it 
+  * at list and add NULL at last index of the list
+  * like {"ls", "-l", NULL}.
   * @input_str: input.
   * Return: list of strings.
   */
@@ -41,5 +43,9 @@ char **split_string(char *input_str)
 		}
 		p++;
 	}
+	row++;
+	m_list = realloc(m_list, row * sizeof(char *));
+	m_list[i + 1] = malloc(sizeof(char));
+	m_list[i + 1] = NULL;
 	return (m_list);
 }
