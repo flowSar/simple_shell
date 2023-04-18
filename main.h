@@ -3,4 +3,6 @@
 
 char *concatenate(char *str, int len);
 
+char **split_string(char *input_str);
+
 #endif
