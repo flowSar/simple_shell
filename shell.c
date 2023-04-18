@@ -13,7 +13,7 @@
 int main(void)
 {
 	char *command_line = malloc(3);
-	char *args[] = {NULL};
+	char *args[] = {concatenate(NULL, 0),NULL};
 	char *envp[] = {NULL};
 	unsigned long int command_len = 0;
 	ssize_t len;
