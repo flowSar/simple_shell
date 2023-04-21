@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+#include <signal.h>
 
 /**
  * remove_new_Line- this function removes new line at the end of command line.
@@ -22,6 +24,5 @@ char *remove_new_Line(char *str)
 		new_str[i] = str[i];
 		i++;
 	}
-	free(str);
 	return (new_str);
 }

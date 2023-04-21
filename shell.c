@@ -17,26 +17,20 @@ int main(void)
 	char *envp[] = {NULL};
 	unsigned long int command_len = 0;
 	ssize_t len;
+	pid_t parent_pid = getpid(), pid;
 
 	while (1)
 	{
-		pid_t pid = fork();
+		printf("$");
+		len = getline(&command_line, &command_len, stdin);
+		if (len > 1)
+			pid = fork();
 
 		if (pid == 0)
-		{
-			printf("$");
-			len = getline(&command_line, &command_len, stdin);
-			command_line = remove_new_Line(command_line);
-			args_list = split_string(command_line);
-			if (execve(concatenate(args_list[0], len), args_list, envp) == -1)
-			{
-				perror("./shell");
-				exit(1);
-			}
-		}
+			execute(command_line, len, parent_pid);
 		else if (pid == -1)
 		{
-			printf("shell closed\n");
+			printf("fork failed \n");
 		}
 		else
 		{
@@ -50,5 +44,6 @@ int main(void)
 			}
 		}
 	}
+	free(command_line);
 	return (0);
 }

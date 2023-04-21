@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 /**
-  * split_args - splits string by ' ' and load it 
+  * split_string - splits string by ' ' and load it
   * at list and add NULL at last index of the list
   * like {"ls", "-l", NULL}.
   * @input_str: input.
@@ -12,6 +12,7 @@ char **split_string(char *input_str)
 {
 	char **m_list;
 	int row = 1, colum = 1, s = -1, i = 0, j = 0, p = 0;
+
 	if (input_str != NULL)
 	{
 		m_list = malloc(row * sizeof(char *));
@@ -25,7 +26,7 @@ char **split_string(char *input_str)
 			m_list[i][j] = input_str[p];
 			colum++;
 			j++;
-			m_list[i] = realloc(m_list[i],colum * sizeof(char));
+			m_list[i] = realloc(m_list[i], colum * sizeof(char));
 			s = -1;
 		}
 		else if (input_str[p] == ' ')
