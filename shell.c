@@ -16,14 +16,14 @@
 int main(int argc, __attribute__((unused))char **argv, char **envp)
 {
 	char *command_line = NULL;
-	size_t command_len = argc;
 	int len, res;
 	pid_t parent_pid = getpid(), pid;
 
 	while (1)
 	{
 		printf("$");
-		len = getline(&command_line, &command_len, stdin);
+		fflush(stdout);
+		len = _getline(&command_line, 256 + argc);
 		if (len == -1)
 			break;
 		if (len > 1)
