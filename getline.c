@@ -11,7 +11,7 @@
 
 size_t _getline(char **buffer, size_t buffer_size)
 {
-	size_t bytes_red;
+	static size_t bytes_red;
 	*buffer = malloc(buffer_size * sizeof(char));
 
 	bytes_red = read(0, *buffer, buffer_size);
