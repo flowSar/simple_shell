@@ -5,21 +5,33 @@
 #include <sys/wait.h>
 #include "main.h"
 
-extern char **environ;
+/**
+  * execute - replace new process if commandd line doesn't equal
+  * exit or env . terminat the process if command = exit.
+  * and get enironment setting if command = env.
+  * @command_line: input.
+  * @len: length,
+  * @pid: process id.
+  * @envp : environment.
+  * Return: 1 if it fail and 0 if it success.
+  */
 
-void execute(char *command_line, int len, pid_t pid)
+int execute(char *command_line, int len, pid_t pid, char **envp)
 {
-	char **args_list;
+	char **args_list = NULL;
 	char *program_exit = "exit";
 	char *env_command = "env";
-	char **envp = environ;
 	int i = 0;
 
 	command_line = remove_new_Line(command_line);
+	if (command_line == NULL)
+		return (1);
+
 	if (strcmp(command_line, program_exit) == 0)
 	{
-		kill(pid, SIGTERM);
-		exit(0);
+		kill(pid, SIGINT);
+		free(command_line);
+		return (1);
 	}
 	else if (strcmp(command_line, env_command) == 0)
 	{
@@ -28,14 +40,17 @@ void execute(char *command_line, int len, pid_t pid)
 			printf("%s\n", envp[i]);
 			i++;
 		}
+		return (1);
 	}
 	else
 	{
 		args_list = split_string(command_line);
+		free(command_line);
 		if (execve(concatenate(args_list[0], len), args_list, NULL) == -1)
 		{
 			perror("./shell");
 			exit(1);
 		}
 	}
+	return (0);
 }

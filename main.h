@@ -7,6 +7,7 @@ char **split_string(char *input_str);
 
 char *remove_new_Line(char *str);
 
-void execute(char *command ,int len, pid_t pid);
+int execute(char *command_line, int len, pid_t pid, char **envp);
+
 
 #endif

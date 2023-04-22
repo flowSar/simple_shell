@@ -7,30 +7,38 @@
 
 /**
  * main- entry function.
+ * @argc: argument number.
+ * @argv: argument list.
+ * @envp: environment settings list.
  * Return: 0 if success and 1 if fails .
  */
 
-int main(void)
+int main(int argc, __attribute__((unused))char **argv, char **envp)
 {
-	char *command_line = malloc(3);
-	char **args_list;
-	char *envp[] = {NULL};
-	unsigned long int command_len = 0;
-	ssize_t len;
+	char *command_line = NULL;
+	size_t command_len = argc;
+	int len, res;
 	pid_t parent_pid = getpid(), pid;
 
 	while (1)
 	{
 		printf("$");
 		len = getline(&command_line, &command_len, stdin);
+		if (len == -1)
+			break;
 		if (len > 1)
 			pid = fork();
-
 		if (pid == 0)
-			execute(command_line, len, parent_pid);
+		{
+			res = execute(command_line, len, parent_pid, envp);
+
+			if (res == 1)
+				break;
+		}
 		else if (pid == -1)
 		{
 			printf("fork failed \n");
+			break;
 		}
 		else
 		{
@@ -44,6 +52,5 @@ int main(void)
 			}
 		}
 	}
-	free(command_line);
 	return (0);
 }

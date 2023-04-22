@@ -15,8 +15,9 @@ char *remove_new_Line(char *str)
 
 	if (str == NULL)
 		return (NULL);
+
 	len = strlen(str);
-	new_str = malloc((len - 1) * sizeof(char));
+	new_str = malloc(len * sizeof(char));
 	if (new_str == NULL)
 		return (NULL);
 	while (str[i] != '\n')
@@ -24,5 +25,7 @@ char *remove_new_Line(char *str)
 		new_str[i] = str[i];
 		i++;
 	}
+	free(str);
+	new_str[i] = '\0';
 	return (new_str);
 }
