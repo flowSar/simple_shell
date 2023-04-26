@@ -20,6 +20,13 @@ int _strlen(char *str)
 	return (len);
 }
 
+/**
+  * _strcpy - copy string from pointer to another.
+  * @str1: pointer destination.
+  * @str2: source.
+  * Return: return destination pointer.
+  */
+
 char *_strcpy(char *str1, char *str2)
 {
 	int idx = 0;

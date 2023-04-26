@@ -24,14 +24,14 @@ void free_memory(char **list)
 /**
  * _realloc- mimic realloc function.
  * @str: old memory location.
- * @size: size of a new alocated memory.
+ * @new_size: size of a new alocated memory.
  * Return: the new alocated memory.
  */
 
 void *_realloc(void *str, int new_size)
 {
 	char *ptr;
-	int ptr_len = _strlen((char*)str);
+	int ptr_len = _strlen((char *)str);
 
 	if (ptr_len == new_size)
 		return (str);
