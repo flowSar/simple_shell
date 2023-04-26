@@ -17,8 +17,7 @@ int main(int argc, __attribute__((unused))char **argv, char **envp)
 {
 	char *command_line;
 	int len = 0, res;
-	size_t command_len = 0;
-	pid_t parent_pid = getpid(), pid;
+	pid_t pid;
 
 	while (1)
 	{
@@ -31,7 +30,7 @@ int main(int argc, __attribute__((unused))char **argv, char **envp)
 			pid = fork();
 		if (pid == 0)
 		{
-			res = execute(command_line, len, getppid(), envp);
+			res = execute(command_line, len, pid, envp);
 			if (res == -1)
 				break;
 		}
