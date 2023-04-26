@@ -21,7 +21,7 @@ int main(int argc, char **argv, char **envp)
 
 	while (1)
 	{
-		write(STDIN_FILENO, "$ ", 2);;
+		write(STDIN_FILENO, "$ ", 2);
 		fflush(stdout);
 		len = _getline(&command_line, 1024 + argc);
 		if (len == 1)
