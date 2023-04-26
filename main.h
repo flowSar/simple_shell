@@ -16,4 +16,7 @@ void write_pipe_msg(char **msg);
 int _isEqual(char *str1, char *str2);
 
 void free_memory(char **list);
+
+int _strlen(char *str);
+
 #endif
