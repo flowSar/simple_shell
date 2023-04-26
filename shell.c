@@ -13,7 +13,7 @@
  * Return: 0 if success and 1 if fails .
  */
 
-int main(int argc, __attribute__((unused))char **argv, char **envp)
+int main(int argc, char **argv, char **envp)
 {
 	char *command_line;
 	int len = 0, res;
@@ -21,7 +21,7 @@ int main(int argc, __attribute__((unused))char **argv, char **envp)
 
 	while (1)
 	{
-		printf("$");
+		write(STDIN_FILENO, "$ ", 2);;
 		fflush(stdout);
 		len = _getline(&command_line, 1024 + argc);
 		if (len == 1)
@@ -36,7 +36,6 @@ int main(int argc, __attribute__((unused))char **argv, char **envp)
 		}
 		else if (pid == -1)
 		{
-			printf("fork failed \n");
 			exit(1);
 		}
 		else
@@ -48,7 +47,7 @@ int main(int argc, __attribute__((unused))char **argv, char **envp)
 			waitpid(pid, &status, 0);
 			if (status == -1)
 			{
-				perror("./shell");
+				perror(argv[0]);
 				exit(1);
 			}
 		}
