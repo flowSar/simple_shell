@@ -24,9 +24,12 @@ char *concatenate(char *str, int len)
 		return (full_path);
 	while (str[i] != '\0')
 	{
-		full_path[p] = str[i];
+		if (full_path[i] != str[i])
+		{
+			full_path[p] = str[i];
+			p++;
+		}
 		i++;
-		p++;
 	}
 	return (full_path);
 }

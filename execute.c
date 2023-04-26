@@ -3,8 +3,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <signal.h>
 #include "main.h"
-
 /**
   * execute - replace new process if commandd line doesn't equal
   * exit or env . terminat the process if command = exit.
@@ -24,33 +24,37 @@ int execute(char *command_line, int len, pid_t pid, char **envp)
 	int i = 0;
 
 	command_line = remove_new_Line(command_line);
+	args_list = split_string(command_line);
 	if (command_line == NULL)
 		return (1);
 
-	if (strcmp(command_line, program_exit) == 0)
+	if (_isEqual(command_line, program_exit) == 0)
 	{
-		kill(pid, SIGINT);
 		free(command_line);
-		return (1);
+		free_memory(args_list);
+		kill(pid, SIGINT);
+		return (-1);
 	}
-	else if (strcmp(command_line, env_command) == 0)
+	else if (_isEqual(command_line, env_command) == 0)
 	{
 		while (envp[i] != NULL)
 		{
 			printf("%s\n", envp[i]);
 			i++;
 		}
-		return (1);
+		free(command_line);
+		free_memory(args_list);
+		return (0);
 	}
 	else
 	{
-		args_list = split_string(command_line);
 		free(command_line);
 		if (execve(concatenate(args_list[0], len), args_list, NULL) == -1)
 		{
 			perror("./shell");
 			exit(1);
 		}
+		return (0);
 	}
 	return (0);
 }
