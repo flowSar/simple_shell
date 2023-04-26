@@ -11,8 +11,6 @@ int execute(char *command_line, int len, pid_t pid, char **envp);
 
 size_t _getline(char **buffer, size_t buffer_size);
 
-void red_pipe_msg();
-
 void write_pipe_msg(char **msg);
 
 int _isEqual(char *str1, char *str2);
