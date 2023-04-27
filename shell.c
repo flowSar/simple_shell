@@ -16,10 +16,10 @@
 int main(int argc, char **argv, char **envp)
 {
 	char *command_line;
-	int len = 0, res;
+	int len = 0, res = 0;
 	pid_t pid;
 
-	while (1)
+	while (res == 0)
 	{
 		write(STDIN_FILENO, "$ ", 2);
 		fflush(stdout);
@@ -30,9 +30,10 @@ int main(int argc, char **argv, char **envp)
 			pid = fork();
 		if (pid == 0)
 		{
-			res = execute(command_line, len, pid, envp);
+			res = execute(command_line, len, pid, envp, argv[0]);
 			if (res == -1)
-				break;
+				exit(1);
+			printf("res: %d\n", res);
 		}
 		else if (pid == -1)
 		{
@@ -42,9 +43,9 @@ int main(int argc, char **argv, char **envp)
 		{
 			int status = 0;
 
-			if (len == 0)
+			if (len == 0 || res == -1)
 				exit(1);
-			waitpid(pid, &status, 0);
+			wait(NULL);
 			if (status == -1)
 			{
 				perror(argv[0]);

@@ -16,7 +16,7 @@
   * Return: 1 if it fail and 0 if it success.
   */
 
-int execute(char *command_line, int len, pid_t pid, char **envp)
+int execute(char *command_line, int len, pid_t pid, char **envp, char *pname)
 {
 	char **args_list = NULL;
 	char *program_exit = "exit";
@@ -51,7 +51,7 @@ int execute(char *command_line, int len, pid_t pid, char **envp)
 		free(command_line);
 		if (execve(concatenate(args_list[0], len), args_list, NULL) == -1)
 		{
-			perror("./shell");
+			perror(pname);
 			exit(1);
 		}
 		return (0);

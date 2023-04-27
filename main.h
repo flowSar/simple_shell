@@ -7,7 +7,7 @@ char **split_string(char *input_str);
 
 char *remove_new_Line(char *str);
 
-int execute(char *command_line, int len, pid_t pid, char **envp);
+int execute(char *command_line, int len, pid_t pid, char **envp, char *pname);
 
 size_t _getline(char **buffer, size_t buffer_size);
 
