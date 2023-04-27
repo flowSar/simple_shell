@@ -19,7 +19,7 @@ char **execu_prepare(char **envp)
 	len = _getline(&command_line, 1024);
 
 	if (len == 0)
-		exit(1);
+		exit(0);
 	command_line = remove_new_Line(command_line);
 	args = split_string(command_line);
 	if (isbuildin(command_line, args, envp) == -1 && len != 1)
