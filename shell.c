@@ -41,6 +41,7 @@ int main(int argc, char **argv, char **envp)
 		}
 		else
 		{
+			//push test
 			int status = 0;
 
 			if (len == 0 || res == -1)
