@@ -45,7 +45,7 @@ int main(int argc, char **argv, char **envp)
 
 			if (len == 0 || res == -1)
 				exit(1);
-			wait(NULL);
+			waitpid(pid, &status, 0);
 			if (status == -1)
 			{
 				perror(argv[0]);
