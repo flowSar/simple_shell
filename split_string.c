@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "main.h"
 /**
   * split_string - splits string by ' ' and load it
   * at list and add NULL at last index of the list

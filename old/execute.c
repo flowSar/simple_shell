@@ -1,60 +1,70 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <signal.h>
 #include "main.h"
-/**
-  * execute - replace new process if commandd line doesn't equal
-  * exit or env . terminat the process if command = exit.
-  * and get enironment setting if command = env.
-  * @command_line: input.
-  * @len: length,
-  * @pid: process id.
-  * @envp : environment.
-  * Return: 1 if it fail and 0 if it success.
-  */
 
-int execute(char *command_line, int len, pid_t pid, char **envp, char *pname)
+size_t is_absolute(char *str)
 {
-	char **args_list = NULL;
-	char *program_exit = "exit";
-	char *env_command = "env";
-	int i = 0;
-
-	command_line = remove_new_Line(command_line);
-	args_list = split_string(command_line);
-	if (command_line == NULL)
-		return (1);
-
-	if (_isEqual(command_line, program_exit) == 0)
+	size_t i = 0;     
+	
+	while (str[i] != '\0' && str[i] != '/')
 	{
-		free(command_line);
-		free_memory(args_list);
-		kill(pid, SIGINT);
-		return (-1);
+		i++;
 	}
-	else if (_isEqual(command_line, env_command) == 0)
+	
+	return (i != strlen(str) || str[i] == '/');
+}
+
+/**
+  * execute - passes a string to execve sys call
+  * @c: pointer to string to be executed
+  * @envp: envp vars passed by main prog
+  * @parent_pid: main process pid
+  * Return: whatever execve returned
+  */
+int execute(char *c, char **envp, pid_t parent_pid)
+{
+
+	int exec_value;
+	char **args_list = split_args(c);
+	char command[1024] = "";
+	char *new_command;
+
+	char *path = "/usr/bin/";
+
+	/*check for built-ins*/
+	if (is_builtin(args_list[0], envp, parent_pid) == 1)
 	{
-		while (envp[i] != NULL)
-		{
-			printf("%s\n", envp[i]);
-			i++;
-		}
-		free(command_line);
-		free_memory(args_list);
-		return (0);
+		;
 	}
+
 	else
 	{
-		free(command_line);
-		if (execve(concatenate(args_list[0], len), args_list, NULL) == -1)
+	
+		/**
+		 * printf("About to execute : \'%s\'\n", args_list[0]);
+		 * printf("is absolute : %d\n", is_absolute(args_list[0]));
+		 * printf("args[0] : %s\n", args_list[0]);
+		*/
+
+		if (is_absolute(args_list[0]) == 0)
 		{
-			perror(pname);
-			exit(1);
+			/*printf("adding path\n");*/
+			strcat(command, path);
+			strcat(command, args_list[0]);
+			strcat(command, "\n");
+			new_command = allocate_string(command);
+			/*printf("%s\n", new_command);*/
+			exec_value = execve(new_command, args_list, envp);
+			/*printf("exec = %d\n", exec_value);*/
 		}
-		return (0);
+		else
+		{
+			exec_value = execve(args_list[0], args_list, envp);
+		}
+			if (exec_value == -1)
+				printf("ERROR : File exists but execuve(-1)\n");
+
 	}
-	return (0);
+
+	exit(-1);
+
+	return (exec_value); /*just in case the kernel cought in fire*/
 }

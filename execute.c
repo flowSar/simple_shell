@@ -1,70 +1,32 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "main.h"
-
-size_t is_absolute(char *str)
-{
-	size_t i = 0;     
-	
-	while (str[i] != '\0' && str[i] != '/')
-	{
-		i++;
-	}
-	
-	return (i != strlen(str) || str[i] == '/');
-}
-
 /**
-  * execute - passes a string to execve sys call
-  * @c: pointer to string to be executed
-  * @envp: envp vars passed by main prog
-  * @parent_pid: main process pid
-  * Return: whatever execve returned
-  */
-int execute(char *c, char **envp, pid_t parent_pid)
+ * execu_prepare -this function prepere command line for execute.
+ * @envp:environment.
+ * Return: return command line and its argument in a list.
+ */
+
+char **execu_prepare(char **envp)
 {
+	char *command_line;
+	char **args;
+	size_t len;
 
-	int exec_value;
-	char **args_list = split_args(c);
-	char command[1024] = "";
-	char *new_command;
+	write(STDIN_FILENO, "$ ", 2);
+	fflush(stdout);
+	len = _getline(&command_line, 1024);
 
-	char *path = "/usr/bin/";
-
-	/*check for built-ins*/
-	if (is_builtin(args_list[0], envp, parent_pid) == 1)
+	if (len == 0)
+		exit(1);
+	command_line = remove_new_Line(command_line);
+	args = split_string(command_line);
+	if (isbuildin(command_line, args, envp) == -1 && len != 1)
 	{
-		;
+		if (args == NULL)
+			return (NULL);
+		return (args);
 	}
-
-	else
-	{
-	
-		/**
-		 * printf("About to execute : \'%s\'\n", args_list[0]);
-		 * printf("is absolute : %d\n", is_absolute(args_list[0]));
-		 * printf("args[0] : %s\n", args_list[0]);
-		*/
-
-		if (is_absolute(args_list[0]) == 0)
-		{
-			/*printf("adding path\n");*/
-			strcat(command, path);
-			strcat(command, args_list[0]);
-			strcat(command, "\n");
-			new_command = allocate_string(command);
-			/*printf("%s\n", new_command);*/
-			exec_value = execve(new_command, args_list, envp);
-			/*printf("exec = %d\n", exec_value);*/
-		}
-		else
-		{
-			exec_value = execve(args_list[0], args_list, envp);
-		}
-			if (exec_value == -1)
-				printf("ERROR : File exists but execuve(-1)\n");
-
-	}
-
-	exit(-1);
-
-	return (exec_value); /*just in case the kernel cought in fire*/
+	return (NULL);
 }

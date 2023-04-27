@@ -13,27 +13,23 @@
  * Return: 0 if success and 1 if fails .
  */
 
-int main(int argc, char **argv, char **envp)
+int main(__attribute__((unused))int argc, char **argv, char **envp)
 {
-	char *command_line;
-	int len = 0, res = 0;
+	char **args = NULL;
 	pid_t pid;
 
-	while (res == 0)
+	while (1)
 	{
-		write(STDIN_FILENO, "$ ", 2);
-		fflush(stdout);
-		len = _getline(&command_line, 1024 + argc);
-		if (len == 1)
-			continue;
-		if (len > 1)
+		args = execu_prepare(envp);
+		if (args)
 			pid = fork();
 		if (pid == 0)
 		{
-			res = execute(command_line, len, pid, envp, argv[0]);
-			if (res == -1)
+			if (execve(concatenate(args[0]), args, envp) == -1)
+			{
+				perror(argv[0]);
 				exit(1);
-			printf("res: %d\n", res);
+			}
 		}
 		else if (pid == -1)
 		{
@@ -41,11 +37,8 @@ int main(int argc, char **argv, char **envp)
 		}
 		else
 		{
-			//push test
 			int status = 0;
 
-			if (len == 0 || res == -1)
-				exit(1);
 			waitpid(pid, &status, 0);
 			if (status == -1)
 			{

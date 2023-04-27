@@ -1,15 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "main.h"
 
 /**
  * concatenate -function that concatenate two strings.
  * @str: input string.
- * @len : length of str.
  * Return: string .
  */
-char *concatenate(char *str, int len)
+char *concatenate(char *str)
 {
 	char *path = "/bin/";
+	int len = _strlen(str);
 	char *full_path = malloc(5 + len);
 	int i = 0, p = 0;
 
