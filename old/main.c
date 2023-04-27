@@ -1,72 +1,92 @@
 #include "main.h"
 
 /**
-  * main - code entry point
-  * @argc: number of args to main func
-  * @argv: list of args to main function
-  * @envp: environment variables passed to main
-  *             envp pass is not part of POSIX can be replaced by extern environ var
-  * Return: 0 hopefully
-  */
-int main(int argc, __attribute__((unused))char *argv[], char *envp[])
+ * signal_handler - checks if Ctrl-c
+ * @signal_number: signal number
+ */
+void signal_handler(int signal_number)
 {
-        pid_t parent, pid;
-        int is_exit; 
-        int is_env;
-        int is_found;
-        char *new_buffer;
-        (void)argc;
-        
-	
+	if (signal_number == SIGINT)
+	{
+		_puts("\n$ ");
+	}
+}
 
-        parent = getpid();
+/**
+* end_of_file - handles end of file
+* @len: getline function return
+* @buffer: chars buffer
+ */
+void end_of_file(int len, char *buffer)
+{
+	(void)buffer;
 
-        while (1)
-        {
-                char path[1024] = "/usr/bin/";
-                new_buffer = read_line(); /*previously read_line()*/
-                is_exit = !(strcmp(new_buffer, "exit"));
-		is_env = !(strcmp(new_buffer, "env"));
-                if (is_absolute(new_buffer) == 1)
-                {
-		        is_found = !(access(split_args(new_buffer)[0], F_OK));
-                }
-                else 
-                {
-                        strcat(path, split_args(new_buffer)[0]);
-                        is_found = !(access(path, F_OK));
-                }
+	if (len == -1)
+	{
+		if (isatty(STDIN_FILENO))
+		{
+			_puts("\n");
+			free(buffer);
+		}
+		exit(0);
+	}
+}
+/**
+  * is_terminal - verif if open fd is terminal
+  */
 
-                /*printf("path : %s\n", path);*/
-                /*printf("is found : %d\n", is_found);*/
+void is_terminal(void)
+{
+	if (isatty(STDIN_FILENO))
+	{
+		_puts("$ ");
+	}
+}
+/**
+ * main - code entry point
+ * Return: 0 on success otherwise exit code
+ */
 
+int main(void)
+{
+	ssize_t len = 0; 
+	size_t size = 0;
+	char *buffer = NULL, *val, *path, **argv;
+	list_path *string_end = '\0';
+	void (*f)(char **);
 
-		if (is_found || is_exit || is_env) /*remove the one*/
-                {    
-                    pid = fork();
-                    if (pid == -1) /*checking if fork failed*/
-                    {
-                            printf("fork failed");
-    
-                    }
-                    else if (pid > 0) /*parent process code*/
-                    {
-                            int status;
-    
-                            waitpid(pid, &status, 0); /*waits until child process returns*/
-                    }
-                    else /*child process code*/
-                    {
-			    /*printf("calling exec\n");*/
-                            execute(new_buffer, envp, parent);
-                    }
-                }
-                
-                else
-                {
-                    printf("./shell : No such file or directory\n");
-                }
-        }
-        
-        return (0);
+	signal(SIGINT, signal_handler);
+	while (len != EOF)
+	{
+		is_terminal();
+		len = getline(&buffer, &size, stdin);
+		end_of_file(len, buffer);
+		argv = splits_string(buffer, " \n");
+		if (!argv || !argv[0])
+			execute(argv);
+		else
+		{
+			val = _getenv("PATH");
+			string_end = path_list(val);
+			path = find_pathname(argv[0], string_end);
+			f = is_builtin(argv);
+			if (f)
+			{
+				free(buffer);
+				f(argv);
+			}
+			else if (!path)
+				execute(argv);
+			else if (path)
+			{
+				free(argv[0]);
+				argv[0] = path;
+				execute(argv);
+			}
+		}
+	}
+	free_list(string_end);
+	free_argv(argv);
+	free(buffer);
+	return (0);
 }

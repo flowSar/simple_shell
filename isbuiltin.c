@@ -27,7 +27,7 @@ int isbuildin(char *command, char **args, char **envp)
 	}
 	else if (_isEqual(command, Exit) == 0)
 	{
-		exit(1);
+		exit(0);
 		return (0);
 	}
 	else if (_isEqual(args[0], Exit) == 0)
