@@ -9,7 +9,7 @@
  * sigint_handler- this function hunder exite with CTRL^D.
  * @sig: argument number.
  */
-void sigint_handler(int sig)
+void sigint_handler(__attribute__((unused))int sig)
 {
 	_exit(0);
 }
