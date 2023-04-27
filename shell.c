@@ -3,8 +3,16 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <signal.h>
 #include "main.h"
-
+/**
+ * sigint_handler- this function hunder exite with CTRL^D.
+ * @sig: argument number.
+ */
+void sigint_handler(int sig)
+{
+	_exit(0);
+}
 /**
  * main- entry function.
  * @argc: argument number.
@@ -28,22 +36,23 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			if (execve(concatenate(args[0]), args, envp) == -1)
 			{
 				perror(argv[0]);
-				exit(1);
+				exit(0);
 			}
 		}
 		else if (pid == -1)
 		{
-			exit(1);
+			exit(0);
 		}
 		else
 		{
 			int status = 0;
 
 			waitpid(pid, &status, 0);
+			signal(SIGINT, sigint_handler);
 			if (status == -1)
 			{
 				perror(argv[0]);
-				exit(1);
+				exit(0);
 			}
 		}
 	}
