@@ -14,7 +14,7 @@ int isbuildin(char *command, char **args, char **envp)
 {
 	char *env = "env";
 	char *Exit = "exit";
-	int i = 0;
+	int i = 0, exit_status = 0;
 
 	if (_isEqual(command, env) == 0)
 	{
@@ -27,13 +27,14 @@ int isbuildin(char *command, char **args, char **envp)
 	}
 	else if (_isEqual(command, Exit) == 0)
 	{
-		exit(0);
 		return (0);
 	}
 	else if (_isEqual(args[0], Exit) == 0)
 	{
+		exit_status = atoi(args[1]);
 		if (args[1] != NULL || _strlen(args[1]) < 2)
-			exit(atoi(args[1]));
+			return (exit_status);
+		return (exit_status);
 	}
 	return (-1);
 }

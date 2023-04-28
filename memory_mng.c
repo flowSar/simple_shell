@@ -20,31 +20,3 @@ void free_memory(char **list)
 		free(list);
 		}
 }
-
-/**
- * _realloc- mimic realloc function.
- * @str: old memory location.
- * @new_size: size of a new alocated memory.
- * Return: the new alocated memory.
- */
-
-void *_realloc(void *str, int new_size)
-{
-	char *ptr;
-	int ptr_len = _strlen((char *)str);
-
-	if (ptr_len == new_size)
-		return (str);
-	if (new_size == 0)
-	{
-		free(str);
-		return (NULL);
-	}
-	if (str == NULL)
-		return (malloc(new_size));
-
-	ptr = malloc(new_size);
-	ptr = _strcpy(ptr, str);
-	free(str);
-	return (ptr);
-}

@@ -23,6 +23,4 @@ int _strlen(char *str);
 
 char *_strcpy(char *str1, char *str2);
 
-void *_realloc(void *str, int new_size);
-
 #endif

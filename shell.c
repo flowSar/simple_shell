@@ -20,7 +20,6 @@ void sigint_handler(__attribute__((unused))int sig)
  * @envp: environment settings list.
  * Return: 0 if success and 1 if fails .
  */
-
 int main(__attribute__((unused))int argc, char **argv, char **envp)
 {
 	char **args = NULL;
@@ -35,12 +34,14 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 		{
 			if (execve(concatenate(args[0]), args, envp) == -1)
 			{
+				free_memory(args);
 				perror(argv[0]);
 				exit(0);
 			}
 		}
 		else if (pid == -1)
 		{
+			free_memory(args);
 			exit(0);
 		}
 		else
@@ -49,8 +50,10 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 
 			waitpid(pid, &status, 0);
 			signal(SIGINT, sigint_handler);
+			free_memory(args);
 			if (status == -1)
 			{
+				free_memory(args);
 				perror(argv[0]);
 				exit(0);
 			}
