@@ -30,12 +30,6 @@ char **execu_prepare(char **envp)
 			return (NULL);
 		return (args);
 	}
-	else if (status != -1)
-	{
-		free(command_line);
-		free_memory(args);
-		exit(status);
-	}
 	else if (status == -1 && len == 1)
 	{
 		free(command_line);

@@ -23,18 +23,28 @@ int isbuildin(char *command, char **args, char **envp)
 			printf("%s\n", envp[i]);
 			i++;
 		}
+		free(command);
+		free_memory(args);
 		return (0);
 	}
 	else if (_isEqual(command, Exit) == 0)
 	{
-		return (0);
+		free(command);
+		free_memory(args);
+		exit(0);
 	}
 	else if (_isEqual(args[0], Exit) == 0)
 	{
 		exit_status = atoi(args[1]);
 		if (args[1] != NULL || _strlen(args[1]) < 2)
-			return (exit_status);
-		return (exit_status);
+		{
+			free(command);
+			free_memory(args);
+			exit(exit_status);
+		}
+		free(command);
+		free_memory(args);
+		exit(exit_status);
 	}
 	return (-1);
 }
