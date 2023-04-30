@@ -3,7 +3,7 @@
 #include <stddef.h> 
 char *concatenate(char *str);
 
-char **split_string(char *input_str);
+char **split_By(char *str, char flag);
 
 char *remove_new_Line(char *str);
 
@@ -19,8 +19,14 @@ int _isEqual(char *str1, char *str2);
 
 void free_memory(char **list);
 
+void *_realloc(void *str, int new_size);
+
 int _strlen(char *str);
 
 char *_strcpy(char *str1, char *str2);
+
+int get_chuck_number(char *str);
+
+char *get_chunck(char *str, int start, int end);
 
 #endif

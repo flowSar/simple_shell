@@ -3,51 +3,90 @@
 #include <string.h>
 #include "main.h"
 /**
-  * split_string - splits string by ' ' and load it
+  * split_By - splits string by ' ' and load it
   * at list and add NULL at last index of the list
   * like {"ls", "-l", NULL}.
   * @input_str: input.
   * Return: list of strings.
   */
-char **split_string(char *input_str)
+char **split_By(char *str, char flag)
 {
-	char **m_list;
-	int row = 1, colum = 1, s = -1, i = 0, j = 0, p = 0;
+    int counter = 0, index = 0 , space = -1, chunck_number, row = 0;
+    int i = 0;
 
-	if (input_str != NULL)
-	{
-		m_list = malloc(row * sizeof(char *));
-		m_list[0] = malloc(colum * sizeof(char));
-	}
+    chunck_number = get_chuck_number(str);
+    char **args = malloc((chunck_number + 1) * sizeof(char *));
+    if (str == NULL)
+        return (0);
 
-	while (input_str[p] != '\0')
-	{
-		if (input_str[p] != ' ')
-		{
-			m_list[i][j] = input_str[p];
-			colum++;
-			j++;
-			m_list[i] = realloc(m_list[i], colum * sizeof(char));
-			s = -1;
-		}
-		else if (input_str[p] == ' ')
-		{
-			s += 1;
-			if (s == 0)
-			{
-				m_list[i][j] = '\0';
-				row++;
-				i++;
-				m_list = realloc(m_list, row * sizeof(char *));
-				m_list[i] = malloc(sizeof(char));
-				j = 0;
-			}
-		}
-		p++;
-	}
-	row++;
-	m_list = realloc(m_list, row * sizeof(char *));
-	m_list[i + 1] = malloc(sizeof(char));
-	m_list[i + 1] = NULL;
-	return (m_list);
+    while (str[index] != '\0')
+    {
+        if (str[index] != flag)
+        {
+            counter++;
+            space = -1;
+        }
+        if (str[index] == flag || str[index + 1] == '\0')
+        {
+            space += 1;
+            if (space == 0)
+            {
+                if (str[index + 1] == '\0')
+                    args[row] = get_chunck(str,i, index+1);
+                else
+                    args[row] = get_chunck(str,i, index);  
+                row++;
+            }
+            counter = 0;
+            i = index + 1;
+        }
+        index++;
+    }
+    args[row] = NULL;
+    return (args);
+}
+/**
+  * get_chuck_number - get number of chuncks in command line
+  * @str: command line.
+  * Return: return number of chuncks.
+  */
+int get_chuck_number(char *str)
+{
+    int len, word_nm = 0, s = -1, i = 0;
+
+    if (str == NULL)
+        return (0);
+    len = _strlen(str);
+    while (str[i] != '\0')
+    {
+        if (str[i] != ' ')
+        {
+            s += 1;
+            if (s == 0)
+                word_nm += 1;
+        }
+        else
+        {
+            s = -1;
+        }
+        i++;
+    }
+    return (word_nm);
+}
+
+char *get_chunck(char *str, int start, int end)
+{
+    char *ch;
+    int i = 0, j = start;
+    int len = end - start;
+    ch = malloc((len + 1) * sizeof(char));
+
+    while (i < len)
+    {
+        ch[i] = str[j];
+        i++;
+        j++;
+    }
+    ch[i] = '\0';
+    return (ch);
 }
