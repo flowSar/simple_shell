@@ -10,7 +10,7 @@
  * sigint_handler- this function handle exit with CTRL^D.
  * @sig: argument number.
  */
-void sigint_handler(__attribute__((unused))int sig, char **args)
+void sigint_handler(__attribute__((unused))int sig)
 {
 	_exit(0);
 }
@@ -49,7 +49,7 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			int status = 0;
 
 			waitpid(pid, &status, 0);
-			signal(SIGINT, (void (*)(int)) sigint_handler);
+			signal(SIGINT, sigint_handler);
 			free_memory(args);
 			if (status == -1)
 			{
