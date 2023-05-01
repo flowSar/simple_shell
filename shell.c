@@ -5,11 +5,12 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include "main.h"
+
 /**
  * sigint_handler- this function handle exit with CTRL^D.
  * @sig: argument number.
  */
-void sigint_handler(__attribute__((unused))int sig)
+void sigint_handler(__attribute__((unused))int sig, char **args)
 {
 	_exit(0);
 }
@@ -34,7 +35,6 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 		{
 			if (execve(concatenate(args[0]), args, envp) == -1)
 			{
-				free_memory(args);
 				perror(argv[0]);
 				exit(0);
 			}
@@ -49,7 +49,7 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			int status = 0;
 
 			waitpid(pid, &status, 0);
-			signal(SIGINT, sigint_handler);
+			signal(SIGINT, (void (*)(int)) sigint_handler);
 			free_memory(args);
 			if (status == -1)
 			{
