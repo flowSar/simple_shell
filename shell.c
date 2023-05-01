@@ -12,7 +12,11 @@
  */
 void sigint_handler(__attribute__((unused))int sig)
 {
-	_exit(0);
+
+	printf("\n");
+	write(STDIN_FILENO, "$ ", 2);
+	signal(SIGINT, sigint_handler);
+
 }
 /**
  * main- entry function.
