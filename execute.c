@@ -23,6 +23,8 @@ char **execu_prepare(char **envp)
 		exit(0);
 	if (len == 1)
 		return (NULL);
+	if (len == -1)
+		exit(0);
 	command_line = remove_new_Line(command_line);
 	args = split_By(command_line, ' ');
 	status = isbuildin(command_line, args, envp);
