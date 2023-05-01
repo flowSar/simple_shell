@@ -10,10 +10,13 @@
 char *concatenate(char *str)
 {
 	char *path = "/bin/";
-	int len = _strlen(str);
-	char *full_path = malloc(5 + len);
+	int len = 0;
+	char *full_path = NULL;
 	int i = 0, p = 0;
 
+	if (str)
+		len = _strlen(str);
+	full_path = malloc(len + len);
 	while (path[i] != '\0')
 	{
 		full_path[i] = path[i];
@@ -32,5 +35,6 @@ char *concatenate(char *str)
 		}
 		i++;
 	}
+	free(str);
 	return (full_path);
 }

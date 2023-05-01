@@ -10,16 +10,18 @@
 
 char **execu_prepare(char **envp)
 {
-	char *command_line;
-	char **args;
-	size_t len;
-	int status;
+	char *command_line = NULL;
+	char **args = NULL;
+	size_t len = 0, command_len;
+	int status = 0;
 
 	write(STDIN_FILENO, "$ ", 2);
 	fflush(stdout);
-	len = _getline(&command_line, 1024);
+	len = getline(&command_line, &command_len, stdin);
 	if (len == 0)
 		exit(0);
+	if (len == 1)
+		return (NULL);
 	command_line = remove_new_Line(command_line);
 	args = split_By(command_line, ' ');
 	status = isbuildin(command_line, args, envp);

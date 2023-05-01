@@ -17,13 +17,13 @@ int isbuildin(char *command, char **args, char **envp)
 	char *Exit = "exit";
 	int i = 0, exit_status = 0;
 
+	if (command == NULL || args == NULL)
+		return (0);
+
 	if (_isEqual(command, env) == 0)
 	{
 		while (envp[i] != NULL)
-		{
-			printf("%s\n", envp[i]);
-			i++;
-		}
+			printf("%s\n", envp[i++]);
 		free(command);
 		free_memory(args);
 		return (0);

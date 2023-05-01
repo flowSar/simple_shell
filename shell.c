@@ -6,7 +6,7 @@
 #include <signal.h>
 #include "main.h"
 /**
- * sigint_handler- this function hunder exite with CTRL^D.
+ * sigint_handler- this function handle exit with CTRL^D.
  * @sig: argument number.
  */
 void sigint_handler(__attribute__((unused))int sig)
@@ -59,5 +59,6 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			}
 		}
 	}
+
 	return (0);
 }
