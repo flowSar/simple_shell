@@ -13,7 +13,7 @@
 void sigint_handler(__attribute__((unused))int sig)
 {
 
-	printf("\n");
+	_putchar('\n');
 	write(STDIN_FILENO, "$ ", 2);
 	signal(SIGINT, sigint_handler);
 

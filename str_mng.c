@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include <unistd.h>
 
 /**
   * _strlen - get length of a string.
@@ -44,4 +45,9 @@ char *_strcpy(char *str1, char *str2)
 		idx++;
 	}
 	return (str1);
+}
+
+int _putchar(char c)
+{
+	return (write(0, &c, 1));
 }

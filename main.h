@@ -17,6 +17,8 @@ void write_pipe_msg(char **msg);
 
 int _isEqual(char *str1, char *str2);
 
+int _putchar(char c);
+
 void free_memory(char **list);
 
 void *_realloc(void *str, int new_size);
