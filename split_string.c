@@ -54,11 +54,10 @@ char **split_By(char *str, char flag)
   */
 int get_chuck_number(char *str)
 {
-	int len, word_nm = 0, s = -1, i = 0;
+	int word_nm = 0, s = -1, i = 0;
 
 	if (str == NULL)
 		return (0);
-	len = _strlen(str);
 	while (str[i] != '\0')
 	{
 		if (str[i] != ' ')
