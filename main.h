@@ -1,6 +1,6 @@
 #ifndef MAIN_H
 #define MAIN_H
-#include <stddef.h> 
+
 char *concatenate(char *str);
 
 char **split_By(char *str, char flag);
