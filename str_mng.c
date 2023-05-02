@@ -55,7 +55,11 @@ int _putchar(char c)
 {
 	return (write(0, &c, 1));
 }
-
+/**
+  * _printf - print onle one string.
+  * @str: char.
+  * Return: return number of char .
+  */
 int _printf(char *str)
 {
 	int i = 0, len = 0;

@@ -9,10 +9,12 @@
  * Return: return command line and its argument in a list.
  */
 
-char **execu_prepare(char **envp)
+LIST *execu_prepare(char **envp)
 {
 	char *command_line = NULL;
 	char **args = NULL;
+	LIST list;
+	LIST *arg_list = &list;
 	size_t len = 0, command_len;
 	int status = 0;
 
@@ -27,13 +29,15 @@ char **execu_prepare(char **envp)
 		exit(0);
 	command_line = clean_command(command_line);
 	args = split_By(command_line, ' ');
+	arg_list->args = args;
+	arg_list->command = command_line;
 	status = isbuildin(command_line, args, envp);
 	if (status == -1 && len != 1)
 	{
 		free(command_line);
 		if (args == NULL)
 			return (NULL);
-		return (args);
+		return (arg_list);
 	}
 	else if (status == -1 && len == 1)
 	{

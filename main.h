@@ -13,7 +13,7 @@ char **split_By(char *str, char flag);
 
 char *clean_command(char *str);
 
-char **execu_prepare(char **envp);
+LIST *execu_prepare(char **envp);
 
 int isbuildin(char *command, char **args, char **envp);
 

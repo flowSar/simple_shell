@@ -12,7 +12,6 @@
  */
 void sigint_handler(__attribute__((unused))int sig)
 {
-
 	_putchar('\n');
 	_exit(0);
 }
@@ -26,27 +25,31 @@ void sigint_handler(__attribute__((unused))int sig)
 int main(__attribute__((unused))int argc, char **argv, char **envp)
 {
 	char **args = NULL;
-	char *command;
+	LIST *list = NULL;
+	char *command = NULL;
 	pid_t pid;
 
 	while (1)
 	{
-		args = execu_prepare(envp);
-		if (args)
+		list = execu_prepare(envp);
+		if (!list)
+			continue;
+		args = list->args;
+		command = list->command;
+		if (list)
 			pid = fork();
 		if (pid == 0)
 		{
-			command = args[0];
 			if (execve(concatenate(args[0]), args, envp) == -1)
 			{
-				printf("%s", command);
+				_printf(command + 5);
 				_printf(": command not found\n");
+				free(command);
 				exit(0);
 			}
 		}
 		else if (pid == -1)
 		{
-			free_memory(args);
 			exit(0);
 		}
 		else
@@ -55,15 +58,13 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 
 			waitpid(pid, &status, 0);
 			signal(SIGINT, sigint_handler);
-			free_memory(args);
 			if (status == -1)
 			{
-				free_memory(args);
+				free_memory(list->args);
 				perror(argv[0]);
 				exit(0);
 			}
 		}
 	}
-
 	return (0);
 }
