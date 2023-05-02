@@ -55,3 +55,16 @@ int _putchar(char c)
 {
 	return (write(0, &c, 1));
 }
+
+int _printf(char *str)
+{
+	int i = 0, len = 0;
+
+	while (str[i] != '\0')
+	{
+		_putchar(str[i]);
+		i++;
+		len++;
+	}
+	return (len);
+}

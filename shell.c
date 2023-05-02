@@ -14,9 +14,7 @@ void sigint_handler(__attribute__((unused))int sig)
 {
 
 	_putchar('\n');
-	write(STDIN_FILENO, "$ ", 2);
-	signal(SIGINT, sigint_handler);
-
+	_exit(0);
 }
 /**
  * main- entry function.
@@ -28,6 +26,7 @@ void sigint_handler(__attribute__((unused))int sig)
 int main(__attribute__((unused))int argc, char **argv, char **envp)
 {
 	char **args = NULL;
+	char *command;
 	pid_t pid;
 
 	while (1)
@@ -37,9 +36,11 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			pid = fork();
 		if (pid == 0)
 		{
+			command = args[0];
 			if (execve(concatenate(args[0]), args, envp) == -1)
 			{
-				perror(argv[0]);
+				printf("%s", command);
+				_printf(": command not found\n");
 				exit(0);
 			}
 		}

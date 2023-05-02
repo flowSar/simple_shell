@@ -1,5 +1,11 @@
 #ifndef MAIN_H
 #define MAIN_H
+typedef struct lis
+{
+	char **args;
+	char *command;
+} LIST;
+
 
 char *concatenate(char *str);
 
@@ -24,6 +30,8 @@ void free_memory(char **list);
 void *_realloc(void *str, int new_size);
 
 int _strlen(char *str);
+
+int _printf(char *str);
 
 char *_strcpy(char *str1, char *str2);
 
