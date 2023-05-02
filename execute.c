@@ -25,7 +25,7 @@ char **execu_prepare(char **envp)
 		return (NULL);
 	if ((int)len == -1)
 		exit(0);
-	command_line = remove_new_Line(command_line);
+	command_line = clean_command(command_line);
 	args = split_By(command_line, ' ');
 	status = isbuildin(command_line, args, envp);
 	if (status == -1 && len != 1)

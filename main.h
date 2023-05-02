@@ -5,7 +5,7 @@ char *concatenate(char *str);
 
 char **split_By(char *str, char flag);
 
-char *remove_new_Line(char *str);
+char *clean_command(char *str);
 
 char **execu_prepare(char **envp);
 

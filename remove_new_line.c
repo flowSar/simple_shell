@@ -30,3 +30,32 @@ char *remove_new_Line(char *str)
 	new_str[i] = '\0';
 	return (new_str);
 }
+
+char *clean_command(char *str)
+{
+	int count = 0, i = 0, p = 0;
+	int len = _strlen(str);
+	int new_str_len = 0;
+	char *new_string = NULL;
+
+	while (str[i] != '\0')
+	{
+		if (str[i] == ' ')
+			count++;
+		else
+			break;
+		i++;
+	}
+
+	new_str_len = len - count;
+	new_string = malloc(new_str_len * sizeof(char));
+	while(str[i] != '\n')
+	{
+		new_string[p] = str[i];
+		i++;
+		p++;
+	}
+	new_string[p] = '\0';
+	free(str);
+	return (new_string);
+}

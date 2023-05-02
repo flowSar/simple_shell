@@ -16,7 +16,7 @@ char *concatenate(char *str)
 
 	if (str)
 		len = _strlen(str);
-	full_path = malloc(len + len);
+	full_path = malloc(len + 5);
 	while (path[i] != '\0')
 	{
 		full_path[i] = path[i];
@@ -30,8 +30,11 @@ char *concatenate(char *str)
 	{
 		if (full_path[i] != str[i])
 		{
-			full_path[p] = str[i];
-			p++;
+			if (str[i] != ' ')
+			{
+				full_path[p] = str[i];
+				p++;
+			}
 		}
 		i++;
 	}
