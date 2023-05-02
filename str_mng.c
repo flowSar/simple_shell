@@ -47,6 +47,11 @@ char *_strcpy(char *str1, char *str2)
 	return (str1);
 }
 
+/**
+  * _putchar - clonning putchar function.
+  * @c: char.
+  * Return: return -1 if it faild .
+  */
 int _putchar(char c)
 {
 	return (write(0, &c, 1));

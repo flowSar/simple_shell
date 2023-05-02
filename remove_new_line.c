@@ -30,7 +30,12 @@ char *remove_new_Line(char *str)
 	new_str[i] = '\0';
 	return (new_str);
 }
-
+/**
+ * clean_command- this function remove new line at the end
+ * and also clean extra space at the beginning.
+ * @str: command line.
+ * Return: return string after cleanning it.
+ */
 char *clean_command(char *str)
 {
 	int count = 0, i = 0, p = 0;
@@ -49,7 +54,7 @@ char *clean_command(char *str)
 
 	new_str_len = len - count;
 	new_string = malloc(new_str_len * sizeof(char));
-	while(str[i] != '\n')
+	while (str[i] != '\n')
 	{
 		new_string[p] = str[i];
 		i++;
