@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "main.h"
 
 /**
@@ -24,26 +21,17 @@ int isbuildin(char *command, char **args, char **envp)
 	{
 		while (envp[i] != NULL)
 			printf("%s\n", envp[i++]);
-		free(command);
 		free_memory(args);
 		return (0);
 	}
-	else if (_isEqual(command, Exit) == 0)
+	else if (_isEqual(command, Exit) == 0 && args[1] == NULL)
 	{
-		free(command);
 		free_memory(args);
 		exit(0);
 	}
-	else if (_isEqual(args[0], Exit) == 0)
+	else if (_isEqual(args[0], Exit) == 0 && args[1] != NULL)
 	{
 		exit_status = atoi(args[1]);
-		if (args[1] != NULL || _strlen(args[1]) < 2)
-		{
-			free(command);
-			free_memory(args);
-			exit(exit_status);
-		}
-		free(command);
 		free_memory(args);
 		exit(exit_status);
 	}

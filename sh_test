@@ -1,0 +1,355 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <signal.h>
+#include "main.h"
+
+/**
+ * sigint_handler- this function handle exit with CTRL^D.
+ * @sig: argument number.
+ */
+
+/**
+ * main- entry function.
+ * @argc: argument number.
+ * @argv: argument list.
+ * @envp: environment settings list.
+ * Return: 0 if success and 1 if fails .
+ */
+int main(__attribute__((unused))int argc, char **argv, char **envp)
+{
+	char **args = NULL;
+	cmd_args *list = NULL;
+	size_t command_len = 0;
+	char *command = NULL;
+	pid_t pid;
+	int len;
+
+	void sigint_handler(__attribute__((unused))int sig)
+	{
+		free(command);
+		_putchar('\n');
+		_exit(0);
+	}
+
+
+	while(1)
+	{
+		printf("$");
+		len = getline(&command, &command_len, stdin);
+
+		if (len > 1)
+			pid = fork();
+		if (pid == 0)
+		{
+			
+			command = clean_command(command);
+			args = split_By(command, ' ');
+
+			execve(concatenate(args[0]), args, NULL);
+			printf("after execeve");
+		}
+		else if (pid == -1)
+		{
+				exit(0);
+		}
+		else
+		{
+			int status = 0;
+
+			waitpid(pid, &status, 0);
+			signal(SIGINT, (void (*)(int)) sigint_handler);
+
+
+		}
+	}
+	return (0);
+}
+
+/**
+  * split_By - split string by flag and load it
+  * to at list and add NULL at last index of the list
+  * like {"ls", "-l", NULL}.
+  * @str: input.
+  * @flag: flsg.
+  * Return: list of strings.
+  */
+char **split_By(char *str, char flag)
+{
+	int counter = 0, index = 0, space = -1, chunck_number, row = 0;
+	char **args = NULL;
+	int i = 0;
+
+	chunck_number = get_chuck_number(str);
+	args = malloc((chunck_number + 1) * sizeof(char *));
+	if (str == NULL)
+		return (0);
+
+	while (str[index] != '\0')
+	{
+		if (str[index] != flag)
+		{
+			counter++;
+			space = -1;
+		}
+		if (str[index] == flag || str[index + 1] == '\0')
+		{
+			space += 1;
+			if (space == 0)
+			{
+				if (str[index + 1] == '\0')
+					args[row] = get_chunck(str, i, index + 1);
+				else
+					args[row] = get_chunck(str, i, index);
+				row++;
+			}
+			counter = 0;
+			i = index + 1;
+		}
+		index++;
+	}
+	args[row] = NULL;
+	free(str);
+	str = NULL;
+	return (args);
+}
+/**
+  * get_chuck_number - get number of chuncks in command line
+  * @str: command line.
+  * Return: return number of chuncks.
+  */
+int get_chuck_number(char *str)
+{
+	int word_nm = 0, s = -1, i = 0;
+
+	if (str == NULL)
+		return (0);
+	while (str[i] != '\0')
+	{
+		if (str[i] != ' ')
+		{
+			s += 1;
+			if (s == 0)
+				word_nm += 1;
+		}
+		else
+		{
+			s = -1;
+		}
+		i++;
+	}
+	return (word_nm);
+}
+
+/**
+  * get_chunck - function get a piece of string from str
+  * from index start to index end.
+  * @str: input strig.
+  * @start: start from.
+  * @end : end.
+  * Return: return required piece.
+  */
+char *get_chunck(char *str, int start, int end)
+{
+	char *ch = NULL;
+	int i = 0, j = start;
+	int len = end - start;
+
+	ch = malloc((len + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	while (i < len)
+	{
+		ch[i] = str[j];
+		i++;
+		j++;
+	}
+	ch[i] = '\0';
+	return (ch);
+}
+/**
+ * concatenate -function that concatenate two strings.
+ * @str: input string.
+ * Return: string .
+ */
+char *concatenate(char *str)
+{
+	char *path = "/bin/";
+	int len = 0;
+	char *full_path = NULL;
+	int i = 0, p = 0;
+
+	if (str)
+		len = _strlen(str);
+	full_path = malloc(len + 5);
+	while (path[i] != '\0')
+	{
+		full_path[i] = path[i];
+		i++;
+	}
+	p = i;
+	i = 0;
+	if (str == NULL)
+		return (full_path);
+	while (str[i] != '\0')
+	{
+		if (full_path[i] != str[i])
+		{
+			if (str[i] != ' ')
+			{
+				full_path[p] = str[i];
+				p++;
+			}
+		}
+		i++;
+	}
+	free(str);
+	return (full_path);
+}
+/**
+  * _strlen - get length of a string.
+  * @str: string input.
+  * Return: return length.
+  */
+int _strlen(char *str)
+{
+	int len = 0;
+
+	if (str == NULL)
+		return (len);
+
+	while (str[len] != '\0')
+	{
+		len++;
+	}
+
+	return (len);
+}
+
+/**
+  * _strcpy - copy string from pointer to another.
+  * @str1: pointer destination.
+  * @str2: source.
+  * Return: return destination pointer.
+  */
+
+char *_strcpy(char *str1, char *str2)
+{
+	int idx = 0;
+
+	if (str1 == NULL && str2 != NULL)
+		return (str2);
+	if (str2 == NULL && str1 != NULL)
+		return (str1);
+	if (str1 == NULL && str2 == NULL)
+		return (NULL);
+
+	while (str2[idx] != '\0')
+	{
+		str1[idx] = str2[idx];
+		idx++;
+	}
+	return (str1);
+}
+
+/**
+  * _putchar - clonning putchar function.
+  * @c: char.
+  * Return: return -1 if it faild .
+  */
+int _putchar(char c)
+{
+	return (write(0, &c, 1));
+}
+/**
+  * _printf - print onle one string.
+  * @str: char.
+  * Return: return number of char .
+  */
+int _printf(char *str)
+{
+	int i = 0, len = 0;
+
+	while (str[i] != '\0')
+	{
+		_putchar(str[i]);
+		i++;
+		len++;
+	}
+	return (len);
+}
+
+/**
+ * remove_new_Line- this function removes new line at the end of command line.
+ * @str: command line.
+ * Return: new string after removing \n or NULL if it fail.
+ */
+char *remove_new_Line(char *str)
+{
+	int len, i = 0;
+	char *new_str = NULL;
+
+	if (str == NULL)
+		return (NULL);
+
+	len = _strlen(str);
+	new_str = malloc(len * sizeof(char));
+	if (new_str == NULL)
+		return (NULL);
+
+	while (str[i] != '\n' || str[i] != '\0')
+	{
+		new_str[i] = str[i];
+		i++;
+	}
+	free(str);
+	new_str[i] = '\0';
+	return (new_str);
+}
+/**
+ * clean_command- this function remove new line at the end
+ * and also clean extra space at the beginning.
+ * @str: command line.
+ * Return: return string after cleanning it.
+ */
+char *clean_command(char *str)
+{
+	int count = 0, i = 0, p = 0;
+	int len = _strlen(str);
+	int new_str_len = 0;
+	char *new_string = NULL;
+
+	while (str[i] != '\0')
+	{
+		if (str[i] == ' ')
+			count++;
+		else
+			break;
+		i++;
+	}
+
+	new_str_len = len - count;
+	new_string = malloc(new_str_len * sizeof(char));
+	while (str[i] != '\n')
+	{
+		new_string[p] = str[i];
+		i++;
+		p++;
+	}
+	new_string[p] = '\0';
+	free(str);
+	return (new_string);
+}
+
+int check_for_new_line(char *str)
+{
+	int i = 0;
+	while (str[i] != ' ')
+	{
+		if (str[i] == '\n')
+			return (-1);
+	}
+	return (0);
+}

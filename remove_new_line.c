@@ -1,7 +1,3 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <signal.h>
 #include "main.h"
 
 /**
@@ -21,7 +17,8 @@ char *remove_new_Line(char *str)
 	new_str = malloc(len * sizeof(char));
 	if (new_str == NULL)
 		return (NULL);
-	while (str[i] != '\n')
+
+	while (str[i] != '\n' || str[i] != '\0')
 	{
 		new_str[i] = str[i];
 		i++;

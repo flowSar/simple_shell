@@ -1,5 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "main.h"
 
 /**
@@ -15,6 +13,7 @@ void free_memory(char **list)
 		while (list[i] != NULL)
 		{
 			free(list[i]);
+			list[i] = NULL;
 			i++;
 		}
 		free(list);

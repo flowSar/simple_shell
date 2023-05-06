@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include "main.h"
 /**
   * split_By - split string by flag and load it
@@ -45,6 +42,7 @@ char **split_By(char *str, char flag)
 		index++;
 	}
 	args[row] = NULL;
+	free(str);
 	return (args);
 }
 /**
