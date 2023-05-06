@@ -1,4 +1,4 @@
-#include <unistd.h>
+#include "main.h"
 
 /**
   * _strlen - get length of a string.
@@ -71,4 +71,30 @@ int _printf(char *str)
 		len++;
 	}
 	return (len);
+}
+/**
+  * _strdup - duplicate a string.
+  * @str: string.
+  * Return: return duplicated string .
+  */
+char *_strdup(char *str)
+{
+	int len = 0, i = 0;
+	char *new_ = NULL;
+
+	if (!str)
+		return (NULL);
+
+	len = _strlen(str);
+	new_ = malloc((len + 1) * sizeof(char));
+	if (!new_)
+		return (NULL);
+
+	while (str[i] != '\0')
+	{
+		new_[i] = str[i];
+		i++;
+	}
+	new_[i] = '\0';
+	return (new_);
 }

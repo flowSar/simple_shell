@@ -22,7 +22,7 @@ char *clean_command(char *str);
 
 char **execu_prepare(char **envp);
 
-void execute(char **cmd, char **envp);
+void execute(char **cmd, char *ch, char **argv, char **envp);
 
 int isbuildin(char *command, char **args, char **envp);
 
@@ -44,6 +44,8 @@ int _strlen(char *str);
 int _printf(char *str);
 
 char *_strcpy(char *str1, char *str2);
+
+char *_strdup(char *str);
 
 int get_chuck_number(char *str);
 

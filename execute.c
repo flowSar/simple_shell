@@ -41,12 +41,15 @@ char **execu_prepare(char **envp)
  * execute -execute command line.
  * @cmd:command line.
  * @envp: environment variable.
+ * @argv: argument.
+ * @ch: command.
  * Return: void.
  */
 
-void execute(char **cmd, char **envp)
+void execute(char **cmd, char *ch, char **argv, char **envp)
 {
 	pid_t pid;
+	int st = 0;
 
 	if (cmd)
 		pid = fork();
@@ -54,8 +57,9 @@ void execute(char **cmd, char **envp)
 	{
 		if (execve(concatenate(cmd[0]), cmd, envp) == -1)
 		{
-			_printf(cmd[0]);
+			_printf(ch);
 			_printf(": command not found\n");
+			free(ch);
 			exit(0);
 		}
 	}
@@ -64,12 +68,11 @@ void execute(char **cmd, char **envp)
 		free_memory(cmd);
 		exit(0);
 	}
-	int status = 0;
 
-	waitpid(pid, &status, 0);
-	if (status == -1)
+	waitpid(pid, &st, 0);
+	if (st == -1)
 	{
-		perror(cmd[0]);
+		perror(argv[0]);
 		exit(0);
 	}
 }
