@@ -1,11 +1,5 @@
 #ifndef MAIN_H
 #define MAIN_H
-typedef struct lis
-{
-	char **args;
-	char *command;
-	int status;
-} cmd_args;
 
 #include <stdio.h>
 #include <stdlib.h>
